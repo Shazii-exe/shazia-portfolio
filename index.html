@@ -188,10 +188,10 @@ a,button,[role="button"],[tabindex]{cursor:url("data:image/svg+xml,%3Csvg xmlns=
 #facttext{max-width:430px;margin:18px auto 0;text-align:center;min-height:3em}
 
 /* ---------------- SPRITES (box-shadow pixel art) ---------------- */
-#player{position:absolute;z-index:10;width:0;height:0;pointer-events:none}
+#player{position:absolute;z-index:4;width:0;height:0;pointer-events:none}
 #player .body{position:relative;transform:translate(-32px,-84px) scale(var(--s,1))}
 .pix{width:4px;height:4px;position:absolute}
-#cat{position:absolute;z-index:9;width:0;height:0;pointer-events:none;transition:none}
+#cat{position:absolute;z-index:3;width:0;height:0;pointer-events:none;transition:none}
 #cat .body{position:relative;transform:translate(-20px,-30px)}
 .flip .body{transform:translate(-32px,-84px) scale(var(--s,1)) scaleX(-1)}
 
@@ -839,10 +839,6 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{
   }
 }),{threshold:.25});
 stops.forEach(s=>io.observe(s));
-const ioF=new IntersectionObserver(es=>es.forEach(e=>{
-  if(e.isIntersecting && !seen.has('finish')){seen.add('finish');coins++;$('#coinN').textContent=coins;}
-}),{threshold:.3});
-ioF.observe($('#finish'));
 
 /* ============ ? block facts ============ */
 const facts=[
