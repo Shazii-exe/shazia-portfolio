@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SHAZIA.EXE — press start</title>
+<meta name="description" content="Shaik Shazia Mahek — AI engineer, writer, builder of thoughtful things. Walk the road: two internships, live research (Lumen), and a cat."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Pixelify+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --grass:#7CC46A;--grass2:#6FB35E;--grass3:#8ED17B;
+  --road:#4A4454;--roadline:#E8E2D0;
+  --ink:#2E2A38;--cream:#FBF6E8;
+  --pink:#E06898;--pinkD:#A6436B;
+  --gold:#F2B33D;--goldD:#C88A1E;
+  --teal:#4AA394;--blue:#7FA8E8;--red:#E05252;
+  --winbar1:#B8D8A8;--winbar2:#F2D8B8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'VT323',monospace;font-size:22px;line-height:1.45;color:var(--ink);
+  background:var(--grass);
+  background-image:
+    repeating-conic-gradient(var(--grass2) 0% 25%, var(--grass) 0% 50%);
+  background-size:14px 14px;
+  overflow-x:hidden;
+}
+img,svg{image-rendering:pixelated}
+::selection{background:var(--gold);color:var(--ink)}
+a{color:var(--pinkD)}
+button{font-family:inherit;cursor:pointer}
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:4px solid var(--gold);outline-offset:2px}
+
+/* pixel cursor */
+html{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' shape-rendering='crispEdges'%3E%3Cpath d='M3 1 L3 16 L7 12 L10 19 L13 18 L10 11 L15 11 Z' fill='%23FBF6E8' stroke='%232E2A38' stroke-width='2'/%3E%3C/svg%3E") 3 1, auto}
+a,button,[role="button"],[tabindex]{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' shape-rendering='crispEdges'%3E%3Cpath d='M3 1 L3 16 L7 12 L10 19 L13 18 L10 11 L15 11 Z' fill='%23F2B33D' stroke='%232E2A38' stroke-width='2'/%3E%3C/svg%3E") 3 1, pointer}
+
+/* pixie dust */
+.dust{
+  position:fixed;width:6px;height:6px;pointer-events:none;z-index:70;
+  animation:dustfall .7s steps(4) forwards;
+}
+@keyframes dustfall{
+  0%{opacity:1;transform:translate(0,0)}
+  100%{opacity:0;transform:translate(var(--dx,6px),18px)}
+}
+
+.px{font-family:'Press Start 2P',monospace;line-height:1.6}
+.pxs{font-family:'Pixelify Sans',sans-serif}
+
+/* pixel border helper: chunky step border via box-shadow */
+.pixbox{
+  background:var(--cream);
+  border:4px solid var(--ink);
+  box-shadow:0 6px 0 var(--ink), inset 0 4px 0 rgba(255,255,255,.6);
+  position:relative;
+}
+
+/* ---------------- HUD ---------------- */
+#hud{
+  position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:14px;
+  background:var(--ink);color:var(--cream);padding:8px 14px;
+  border-bottom:4px solid #17141E;font-size:19px;
+}
+#hud .px{font-size:11px;color:var(--gold)}
+#hud .hearts{color:var(--red);letter-spacing:2px}
+#hud .coins{margin-left:auto;color:var(--gold)}
+#hud button{
+  background:var(--pink);color:var(--ink);border:3px solid #17141E;padding:2px 12px;
+  font-family:'Press Start 2P';font-size:9px;box-shadow:0 3px 0 #17141E;
+}
+#hud button:active{transform:translateY(3px);box-shadow:none}
+#mapmenu{
+  position:fixed;top:52px;right:10px;z-index:59;display:none;flex-direction:column;gap:0;
+  min-width:250px;font-size:20px;
+}
+#mapmenu.open{display:flex}
+#mapmenu a{
+  text-decoration:none;color:var(--ink);padding:8px 14px;background:var(--cream);
+  border:4px solid var(--ink);border-top:none;
+}
+#mapmenu a:first-child{border-top:4px solid var(--ink)}
+#mapmenu a:hover{background:var(--gold)}
+
+/* ---------------- HERO ---------------- */
+#hero{min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:90px 18px 40px;position:relative}
+#hero h1{font-family:'Press Start 2P';font-size:clamp(1.5rem,6vw,3.2rem);color:var(--cream);
+  text-shadow:4px 4px 0 var(--ink), 8px 8px 0 rgba(46,42,56,.35);margin-bottom:18px}
+#hero h1 span{color:var(--gold)}
+#hero .tag{font-size:clamp(1.3rem,3vw,1.7rem);color:#2E4A2A;max-width:560px;margin:0 auto 30px}
+#pressstart{
+  font-family:'Press Start 2P';font-size:clamp(.7rem,2.4vw,1rem);background:var(--gold);
+  border:4px solid var(--ink);box-shadow:0 6px 0 var(--ink);padding:16px 26px;color:var(--ink);
+  animation:blinkbtn 1.4s steps(1) infinite;text-decoration:none;display:inline-block;
+}
+#pressstart:active{transform:translateY(6px);box-shadow:none}
+@keyframes blinkbtn{50%{background:var(--pink)}}
+.hint{margin-top:22px;font-size:19px;color:#2E4A2A;opacity:.85}
+
+/* pixel sparkles */
+.spark{position:absolute;width:14px;height:14px;pointer-events:none;
+  background:
+   conic-gradient(from 0deg at 50% 50%, transparent 0 25%, var(--c,#FFF3B0) 0 50%, transparent 0 75%, var(--c,#FFF3B0) 0);
+  clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);
+  animation:tw 2.6s steps(2) infinite;
+}
+@keyframes tw{50%{transform:scale(.4);opacity:.4}}
+
+/* ---------------- WORLD / ROAD ---------------- */
+#world{position:relative;width:100%}
+#roadsvg{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+#roadsvg path{fill:none}
+.deco{position:absolute;z-index:2;user-select:none}
+.moo{animation:moo 2.6s steps(2) infinite}
+@keyframes moo{50%{margin-top:-4px}}
+/* villagers + fish patrol back & forth, flipping at each end */
+.walker{animation:patrol var(--pt,9s) linear infinite}
+.walker svg{animation:stepbob .5s steps(2) infinite}
+@keyframes patrol{
+  0%{transform:translateX(0) scaleX(1)}
+  46%{transform:translateX(var(--px,70px)) scaleX(1)}
+  50%{transform:translateX(var(--px,70px)) scaleX(-1)}
+  96%{transform:translateX(0) scaleX(-1)}
+  100%{transform:translateX(0) scaleX(1)}
+}
+@keyframes stepbob{50%{margin-top:-3px}}
+.pond{position:absolute;z-index:2}
+.fish{position:absolute;animation:patrol var(--pt,7s) linear infinite}
+/* pixel tree */
+.tree{width:64px;height:84px;position:absolute}
+.tree i{position:absolute;background:var(--t,#3E8A4E);image-rendering:pixelated}
+/* stops */
+.stop{position:absolute;z-index:5;width:min(430px,86vw)}
+.stop .pin{
+  position:absolute;top:-58px;left:24px;width:34px;height:46px;
+}
+.win{border:4px solid var(--ink);box-shadow:6px 8px 0 rgba(46,42,56,.45);background:var(--cream)}
+.win .bar{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:4px solid var(--ink);
+  background:repeating-linear-gradient(90deg,var(--b1,#B8D8A8) 0 12px,var(--b2,#CBE8BC) 12px 24px);
+}
+.win .bar .t{font-family:'Press Start 2P';font-size:10px;flex:1;color:var(--ink)}
+.win .bar i{width:16px;height:16px;border:3px solid var(--ink);background:var(--cream);display:inline-block}
+.win .bar i.x{background:var(--red)}
+.win .body{padding:16px 18px;font-size:21px}
+.win .body p{margin-bottom:10px}
+.win .lvl{font-family:'Press Start 2P';font-size:9px;color:var(--pinkD);display:block;margin-bottom:8px;letter-spacing:.05em}
+.win h2{font-family:'Pixelify Sans';font-weight:600;font-size:1.5rem;margin-bottom:8px}
+.win .stat{display:inline-block;background:#EAF4DC;border:3px solid var(--ink);padding:1px 10px;margin:3px 6px 3px 0;font-size:19px}
+.win .stat b{color:var(--pinkD)}
+.win ul{list-style:none}
+.win li{padding-left:24px;position:relative;margin-bottom:7px}
+.win li::before{content:"▸";position:absolute;left:2px;color:var(--pinkD)}
+.win .btnrow{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
+.win .pbtn{
+  font-family:'Press Start 2P';font-size:9px;text-decoration:none;color:var(--ink);
+  background:var(--gold);border:3px solid var(--ink);box-shadow:0 4px 0 var(--ink);padding:9px 12px;
+}
+.win .pbtn.alt{background:var(--pink)}
+.win .pbtn:active{transform:translateY(4px);box-shadow:none}
+.stop{opacity:0;transform:translateY(34px);transition:opacity .5s steps(5),transform .5s steps(5)}
+.stop.in{opacity:1;transform:none}
+
+/* glowing special stop (lumen) */
+.stop.glow .win{animation:glowpulse 2s steps(2) infinite}
+@keyframes glowpulse{50%{box-shadow:6px 8px 0 rgba(46,42,56,.45),0 0 0 6px rgba(242,179,61,.55)}}
+
+/* inventory grid */
+.inv{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.inv{grid-template-columns:1fr}}
+.slot{border:3px solid var(--ink);background:#F4EDD8;padding:8px 10px;font-size:19px}
+.slot b{display:block;font-family:'Pixelify Sans';color:var(--pinkD)}
+
+/* achievievements */
+.ach{display:flex;gap:8px;flex-wrap:wrap}
+.ach span{background:#FFF3C4;border:3px solid var(--ink);padding:3px 10px;font-size:19px}
+
+/* ?-block */
+#qblock{
+  width:74px;height:74px;margin:0 auto;display:flex;align-items:center;justify-content:center;
+  background:var(--gold);border:4px solid var(--ink);box-shadow:0 6px 0 var(--ink),inset -6px -6px 0 var(--goldD);
+  font-family:'Press Start 2P';font-size:26px;cursor:pointer;animation:qbob 1.2s steps(2) infinite;
+}
+@keyframes qbob{50%{transform:translateY(-6px)}}
+#facttext{max-width:430px;margin:18px auto 0;text-align:center;min-height:3em}
+
+/* ---------------- SPRITES (box-shadow pixel art) ---------------- */
+#player{position:absolute;z-index:10;width:0;height:0;pointer-events:none}
+#player .body{position:relative;transform:translate(-32px,-84px) scale(var(--s,1))}
+.pix{width:4px;height:4px;position:absolute}
+#cat{position:absolute;z-index:9;width:0;height:0;pointer-events:none;transition:none}
+#cat .body{position:relative;transform:translate(-20px,-30px)}
+.flip .body{transform:translate(-32px,-84px) scale(var(--s,1)) scaleX(-1)}
+
+/* speech bubble */
+#bubble{
+  position:absolute;z-index:11;transform:translate(-50%,-140px);display:none;
+  background:var(--cream);border:4px solid var(--ink);padding:8px 12px;font-size:19px;
+  max-width:240px;text-align:center;
+}
+#bubble.show{display:block}
+#bubble::after{content:"";position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+  border:7px solid transparent;border-top-color:var(--ink)}
+
+/* ---------------- FINISH ---------------- */
+#finish{position:relative;z-index:5;text-align:center;padding:40px 18px 110px}
+#trophy{font-size:64px;filter:drop-shadow(4px 4px 0 rgba(46,42,56,.4));animation:qbob 1.4s steps(2) infinite;display:inline-block}
+#finish .win{max-width:520px;margin:20px auto 0;text-align:left}
+footer{position:relative;z-index:5;text-align:center;padding:18px;color:#2E4A2A;font-size:19px}
+
+@media(max-width:700px){
+  body{font-size:20px}
+  #player .body{--s:.8}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .stop{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <span class="px">SHAZIA.EXE</span>
+  <span class="hearts">♥ ♥ ♥</span>
+  <span class="coins">⭐ <b id="coinN">0</b>/9</span>
+  <button id="mapBtn" aria-expanded="false">MAP</button>
+</div>
+<nav id="mapmenu" aria-label="jump to a stop">
+  <a href="#hero">⏮ start</a>
+  <a href="#s1">📍 origin story</a>
+  <a href="#s2">📍 level: woxsen</a>
+  <a href="#s3">📍 quest: quadrant</a>
+  <a href="#s4">📍 side quest: singapore</a>
+  <a href="#s5">📍 current quest: quaicu</a>
+  <a href="#s6">⭐ lumen — live research</a>
+  <a href="#s7">🎒 inventory</a>
+  <a href="#s8">🏅 achievements</a>
+  <a href="#s9">❓ fun facts</a>
+  <a href="#finish">🏆 finish</a>
+</nav>
+
+<header id="hero">
+  <div class="spark" style="top:18%;left:14%;--c:#FFF3B0"></div>
+  <div class="spark" style="top:30%;right:16%;--c:#FFC4DA;animation-delay:.6s"></div>
+  <div class="spark" style="bottom:24%;left:22%;--c:#C4E8FF;animation-delay:1.2s"></div>
+  <div class="spark" style="bottom:34%;right:26%;--c:#FFF3B0;animation-delay:.3s"></div>
+  <h1>SHAZIA'S<br><span>WORLD</span></h1>
+  <p class="tag">AI engineer — building systems with a human pulse.<br>walk the road ↓</p>
+  <a id="pressstart" class="px" href="#s1">▶ PRESS START</a>
+  <p class="hint">(scroll = walk. the pixel girl is her. the cat is the cat.)</p>
+</header>
+
+<div id="world">
+  <svg id="roadsvg" preserveAspectRatio="none" aria-hidden="true"></svg>
+
+  <!-- player + cat + bubble -->
+  <div id="player"><div class="body" id="pbody"></div></div>
+  <div id="cat"><div class="body" id="cbody"></div></div>
+  <div id="bubble" role="status"></div>
+
+  <!-- ============ STOPS ============ -->
+  <section class="stop" id="s1" data-side="l">
+    <div class="win" style="--b1:#B8D8A8;--b2:#CBE8BC">
+      <div class="bar"><span class="t">about_me.txt</span><i></i><i class="x"></i></div>
+      <div class="body">
+        <span class="lvl">📍 STOP 1 · THE ORIGIN STORY</span>
+        <p>as a kid, she heard <b>"engineers are problem solvers"</b> — and that settled it.</p>
+        <p>she writes code that turns thought into action. she builds AI that hands people their <b>time</b> back.</p>
+        <p>engineering, design, philosophy — she works where the three meet, and it shows.</p>
+        <p>three words: <span class="stat"><b>curious</b></span><span class="stat"><b>intentional</b></span><span class="stat"><b>driven</b></span></p>
+        <p style="color:#5E5670">"I leave every place, project, and person better than I found them."</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="s2" data-side="r">
+    <div class="win" style="--b1:#F2D8B8;--b2:#F8E4C8">
+      <div class="bar"><span class="t">LEVEL: WOXSEN</span><i></i><i class="x"></i></div>
+      <div class="body">
+        <span class="lvl">📍 STOP 2 · EDUCATION</span>
+        <h2>B.Tech CS — AI & ML</h2>
+        <p>Woxsen University · class of 2027</p>
+        <p><span class="stat">CGPA <b>9.1</b></span><span class="stat">perpetual learner <b>+∞</b></span></p>
+        <p>collects new skills the way others collect souvenirs — equal parts engineering rigor and philosophical curiosity. asks "why" until the subject surrenders.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="s3" data-side="l">
+    <div class="win" style="--b1:#C4D8F2;--b2:#D4E4F8">
+      <div class="bar"><span class="t">QUEST: quadrant_technologies</span><i></i><i class="x"></i></div>
+      <div class="body">
+        <span class="lvl">📍 STOP 3 · FIRST INTERNSHIP · AUG–NOV 2025</span>
+        <h2>Project Intern</h2>
+        <ul>
+          <li><b>RAG PDF chatbot</b> — chunking, embeddings, similarity search. <span class="stat"><b>~40%</b> fewer hallucinations</span></li>
+          <li><b>SQL agent</b> — plain english in, correct SQL out. <span class="stat"><b>~90%</b> query accuracy</span></li>
+          <li>FastAPI backends + LLM integration. <span class="stat"><b>+25%</b> accuracy</span><span class="stat"><b>−30%</b> latency</span></li>
+        </ul>
+        <div class="btnrow"><a class="pbtn" href="https://github.com/Shazii-exe" target="_blank" rel="noopener">GITHUB ▸</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="s4" data-side="r">
+    <div class="win" style="--b1:#F2C4D8;--b2:#F8D4E4">
+      <div class="bar"><span class="t">SIDE QUEST: singapore.sav</span><i></i><i class="x"></i></div>
+      <div class="body">
+        <span class="lvl">📍 STOP 4 · NTU SINGAPORE</span>
+        <h2>GEM Trailblazer — Data Science & AI</h2>
+        <p>flew to Nanyang Technological University for a summer. came back with a perfect score.</p>
+        <p><span class="stat">grade: <b>A — 5.00/5.00</b></span><span class="stat">achievement: flawless run ✦</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="s5" data-side="l">
+    <div class="win" style="--b1:#B8E0D8;--b2:#C8ECE4">
+      <div class="bar"><span class="t">CURRENT QUEST: quaicu</span><i></i><i class="x"></i></div>
+      <div class="body">
+        <span class="lvl">📍 STOP 5 · MAY 2026 – NOW · FOUNDERS OFFICE</span>
+        <h2>Solutions Engineering Intern</h2>
+        <p>Quaicu builds <b>air-gapped, on-premises AI</b> for banks, hospitals & legal teams — where data never leaves the building.</p>
+        <ul>
+          <li>contributing to <b>ALIS</b>, the on-prem AI assistant</li>
+          <li>supporting the <b>AI Governance Kernel</b> — policy, auditability, control</li>
+          <li>currently automating <b>banking loan workflows</b></li>
+          <li>working directly under the CEO</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop glow" id="s6" data-side="r">
+    <div class="win" style="--b1:#F8E4A8;--b2:#FCF0C4">
+      <div class="bar"><span class="t">⭐ ONGOING RESEARCH: lumen</span><i></i><i class="x"></i></div>
+      <div class="body">
+        <span class="lvl">⭐ SPECIAL STOP · LIVE & COLLECTING DATA</span>
+        <h2>Lumen — your question, sharpened</h2>
+        <p>a live research app: one LLM call <b>critiques, scores & routes</b> every prompt. weak prompts get rewritten (up to 2 rounds), then both versions answer — users <b>blind-vote</b> while an AI judge picks independently. measuring human↔AI agreement.</p>
+        <p><span class="stat">Flask</span><span class="stat">Claude Haiku 4.5</span><span class="stat">Supabase</span><span class="stat">Render</span><span class="stat">43 tests ✓</span></p>
+        <div class="btnrow">
+          <a class="pbtn" href="https://lumen-2mqs.onrender.com" target="_blank" rel="noopener">PLAY LIVE ▸</a>
+          <a class="pbtn alt" href="https://github.com/Shazii-exe/Lumen" target="_blank" rel="noopener">GITHUB ▸</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="s7" data-side="l">
+    <div class="win" style="--b1:#D8C4F2;--b2:#E4D4F8">
+      <div class="bar"><span class="t">INVENTORY 🎒</span><i></i><i class="x"></i></div>
+      <div class="body">
+        <span class="lvl">📍 STOP 7 · EQUIPPED SKILLS</span>
+        <div class="inv">
+          <div class="slot"><b>AI & intelligent systems</b>python · ML · GenAI · agentic AI · RAG · LLM integrations · prompt engineering</div>
+          <div class="slot"><b>software engineering</b>FastAPI · Flask · REST APIs · backend · git & github</div>
+          <div class="slot"><b>data & analytics</b>SQL · PostgreSQL · FAISS · pandas · numpy · Power BI</div>
+          <div class="slot"><b>product & design</b>product thinking · UX · presentation design · info architecture</div>
+          <div class="slot"><b>communication</b>technical writing · public speaking · storytelling · research</div>
+          <div class="slot"><b>passive buffs</b>consistency +10 · commitment +10 · critical thinking +15 · problem solving +15 · chai regen ∞</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="s8" data-side="r">
+    <div class="win" style="--b1:#F2E0B8;--b2:#F8ECC8">
+      <div class="bar"><span class="t">ACHIEVEMENTS 🏅</span><i></i><i class="x"></i></div>
+      <div class="body">
+        <span class="lvl">📍 STOP 8 · UNLOCKED</span>
+        <div class="ach">
+          <span>🏆 ideathon winner</span><span>📰 editor-in-chief — tech magazine</span>
+          <span>🥈 innoverse hackathon finalist</span><span>📚 editor-in-chief — tech club</span>
+          <span>🥈 case crunch 2.0 finalist</span><span>✍️ writer, WoxsenTimes</span>
+          <span>🤝 hyderabad GCC blueprint 2026</span><span>🧶 handmade gift crafter</span>
+          <span>🧠 philosophy talker (uninterruptible)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="s9" data-side="l">
+    <div class="win" style="--b1:#F8D4C4;--b2:#FCE4D8">
+      <div class="bar"><span class="t">??? .facts</span><i></i><i class="x"></i></div>
+      <div class="body" style="text-align:center">
+        <span class="lvl">📍 STOP 9 · HIT THE BLOCK</span>
+        <div id="qblock" role="button" tabindex="0" aria-label="hit the question block for a fun fact">?</div>
+        <p id="facttext">hit the block. get a fact. simple economy.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="finish">
+  <span id="trophy">🏆</span>
+  <h2 class="px" style="font-size:clamp(.9rem,3.5vw,1.4rem);color:var(--cream);text-shadow:3px 3px 0 var(--ink);margin-top:10px">NEXT QUEST: YOURS?</h2>
+  <div class="win" style="--b1:#B8D8A8;--b2:#CBE8BC">
+    <div class="bar"><span class="t">new_party_invite.msg</span><i></i><i class="x"></i></div>
+    <div class="body">
+      <p><b>heyy — you made it all the way here. want me to embark on my next journey with you?</b></p>
+      <p>two internships before graduation. live research collecting real data. systems that measurably work. I don't wait for permission, and I finish what I start.</p>
+      <div class="btnrow">
+        <a class="pbtn" href="mailto:shaziamahek18@gmail.com">✉ EMAIL</a>
+        <a class="pbtn alt" href="https://github.com/Shazii-exe" target="_blank" rel="noopener">GITHUB</a>
+        <a class="pbtn" style="background:var(--blue)" href="https://linkedin.com/in/shaik-shazia-mahek" target="_blank" rel="noopener">LINKEDIN</a>
+      </div>
+      <p style="margin-top:12px;color:#5E5670">your move. ✉</p>
+    </div>
+  </div>
+</div>
+<footer>© 2026 shaik shazia mahek · built pixel by pixel · the cat approved this website 🐾</footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ============ sprite art (box-shadow pixel painting) ============ */
+/* palette keys */
+const PAL={
+  h:'#E06898', H:'#A6436B',      /* hijab, hijab dark  */
+  f:'#F2C494', F:'#D9A26E',      /* face, face shade   */
+  e:'#2E2A38',                    /* eyes/outline       */
+  m:'#F2B33D', M:'#C88A1E',      /* kurta gold         */
+  p:'#7A5AA0',                    /* pants purple       */
+  s:'#8A5A34',                    /* shoes              */
+  w:'#FFFFFF',
+  g:'#8A8496', G:'#5E5870',      /* cat grey           */
+  k:'#F8C4D8'                     /* cat ear pink       */
+};
+/* 16w x 21h hijabi sprite, frame A (left foot fwd) & B */
+const GIRL_A=[
+"....hhhhhh......",
+"...hhhhhhhh.....",
+"..hhhhhhhhhh....",
+"..hhHffffHhh....",
+"..hhffffffhh....",
+"..hhfeffefhh....",
+"..hhffffffhh....",
+"..hhfFffFfhh....",
+"..hhhffffhhh....",
+"..hhhhhhhhhh....",
+"...hh.mm.hh.....",
+"...h.mmmm.h.....",
+"....mmmmmm......",
+"....mmmmmm......",
+"....mMmmMm......",
+"....mmmmmm......",
+".....pppp.......",
+".....p..p.......",
+"....pp..pp......",
+"....s....s......",
+"...ss....ss....."];
+const GIRL_B=[
+"....hhhhhh......",
+"...hhhhhhhh.....",
+"..hhhhhhhhhh....",
+"..hhHffffHhh....",
+"..hhffffffhh....",
+"..hhfeffefhh....",
+"..hhffffffhh....",
+"..hhfFffFfhh....",
+"..hhhffffhhh....",
+"..hhhhhhhhhh....",
+"...hh.mm.hh.....",
+"...h.mmmm.h.....",
+"....mmmmmm......",
+"....mmmmmm......",
+"....mMmmMm......",
+"....mmmmmm......",
+".....pppp.......",
+".....p..p.......",
+".....p..p.......",
+".....s..s.......",
+"....ss..ss......"];
+const CAT=[
+"..e.....e..",
+".eke...eke.",
+".eggggggge.",
+".egwgggwge.",
+".eggggggge.",
+"..eggggge..",
+"..eg.g.ge..",
+"...e.e.e..."];
+function paint(el,rows,px=4){
+  let sh=[];
+  rows.forEach((row,y)=>{
+    [...row].forEach((ch,x)=>{
+      if(ch==='.'||!PAL[ch])return;
+      sh.push(`${x*px}px ${y*px}px 0 0 ${PAL[ch]}`);
+    });
+  });
+  el.style.width=px+'px';el.style.height=px+'px';
+  el.style.boxShadow=sh.join(',');
+}
+const pbody=$('#pbody'),cbody=$('#cbody');
+function drawGirl(frame){paint(pbody,frame? GIRL_B:GIRL_A,4);}
+drawGirl(0);paint(cbody,CAT,4);
+
+/* ============ build the road ============ */
+const world=$('#world'),svg=$('#roadsvg');
+const stops=$$('.stop');
+let SEG,pathEl,pathLen,W,H,ROADW;
+function buildRoad(){
+  W=world.clientWidth;
+  SEG=Math.max(innerHeight*0.95,760);
+  ROADW = W<620 ? 54 : 86;
+  H=(stops.length+1)*SEG;
+  world.style.height=H+'px';
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.setAttribute('width',W);svg.setAttribute('height',H);
+  const lx=W*(W<620?0.34:0.30),rx=W*(W<620?0.66:0.70),cx=W*0.5;
+  let d=`M ${cx} 0`;
+  let px_=cx,py=0;
+  stops.forEach((s,i)=>{
+    const tx=(s.dataset.side==='l')?lx:rx;
+    const ty=(i+1)*SEG-SEG*0.35;
+    d+=` C ${px_} ${py+SEG*0.5}, ${tx} ${ty-SEG*0.5}, ${tx} ${ty}`;
+    px_=tx;py=ty;
+  });
+  d+=` C ${px_} ${py+SEG*0.5}, ${cx} ${H-SEG*0.4}, ${cx} ${H}`;
+  svg.innerHTML=`
+    <path d="${d}" stroke="#3A3644" stroke-width="${ROADW+16}" stroke-linecap="round"/>
+    <path d="${d}" stroke="${'#4A4454'}" stroke-width="${ROADW}" stroke-linecap="round"/>
+    <path d="${d}" stroke="#E8E2D0" stroke-width="5" stroke-dasharray="24 28"/>`;
+  pathEl=svg.querySelectorAll('path')[1];
+  pathLen=pathEl.getTotalLength();
+  /* place stops beside their road point */
+  stops.forEach((s,i)=>{
+    const ty=(i+1)*SEG-SEG*0.35;
+    const pt=pointAtY(ty);
+    s.style.top=(ty- s.offsetHeight/2)+'px';
+    const side=s.dataset.side;
+    const w=Math.min(430,W*0.86);
+    let left = side==='l' ? pt.x+70 : pt.x-70-w;
+    left=Math.max(10,Math.min(W-w-10,left));
+    s.style.left=left+'px';
+  });
+  placeDecor();
+}
+/* binary search point on path at given y */
+function pointAtY(y){
+  let lo=0,hi=pathLen;
+  for(let i=0;i<22;i++){
+    const mid=(lo+hi)/2;
+    (pathEl.getPointAtLength(mid).y<y)?lo=mid:hi=mid;
+  }
+  return pathEl.getPointAtLength((lo+hi)/2);
+}
+
+/* ============ decor: trees, flowers, prayer mat ============ */
+function pixTree(x,y,scale=1){
+  const t=document.createElement('div');t.className='deco';t.style.left=x+'px';t.style.top=y+'px';
+  t.innerHTML=`<svg width="${56*scale}" height="${72*scale}" viewBox="0 0 28 36" shape-rendering="crispEdges">
+    <rect x="12" y="26" width="4" height="10" fill="#8A5A34"/>
+    <rect x="6" y="18" width="16" height="8" fill="#3E8A4E"/>
+    <rect x="8" y="10" width="12" height="8" fill="#4EA35E"/>
+    <rect x="10" y="4" width="8" height="6" fill="#5EB86E"/>
+    <rect x="12" y="0" width="4" height="4" fill="#5EB86E"/>
+    <rect x="8" y="20" width="3" height="3" fill="#5EB86E"/>
+  </svg>`;
+  world.appendChild(t);
+}
+function pixFlower(x,y,c='#F2D03D'){
+  const f=document.createElement('div');f.className='deco';f.style.left=x+'px';f.style.top=y+'px';
+  f.innerHTML=`<svg width="28" height="40" viewBox="0 0 14 20" shape-rendering="crispEdges">
+    <rect x="6" y="10" width="2" height="10" fill="#3E8A4E"/>
+    <rect x="4" y="2" width="6" height="6" fill="${c}"/>
+    <rect x="2" y="4" width="2" height="2" fill="${c}"/><rect x="10" y="4" width="2" height="2" fill="${c}"/>
+    <rect x="6" y="0" width="2" height="2" fill="${c}"/><rect x="6" y="8" width="2" height="2" fill="${c}"/>
+    <rect x="6" y="4" width="2" height="2" fill="#B8813F"/>
+  </svg>`;
+  world.appendChild(f);
+}
+function pixMat(x,y){
+  const m=document.createElement('div');m.className='deco';m.style.left=x+'px';m.style.top=y+'px';
+  m.title="a quiet corner 🤍";
+  m.innerHTML=`<svg width="44" height="56" viewBox="0 0 22 28" shape-rendering="crispEdges">
+    <rect x="2" y="2" width="18" height="24" fill="#4AA394"/>
+    <rect x="4" y="4" width="14" height="20" fill="#5EBCAA"/>
+    <rect x="8" y="6" width="6" height="6" fill="#F2D03D"/>
+    <rect x="2" y="2" width="18" height="2" fill="#2E7D6E"/><rect x="2" y="24" width="18" height="2" fill="#2E7D6E"/>
+  </svg>`;
+  world.appendChild(m);
+}
+function pixSheep(x,y,flip){
+  const s=document.createElement('div');s.className='deco moo';s.style.left=x+'px';s.style.top=y+'px';
+  s.style.animationDelay=(Math.random()*2)+'s';
+  s.title="baa.";
+  s.innerHTML=`<svg style="${flip?'transform:scaleX(-1)':''}" width="51" height="36" viewBox="0 0 17 12" shape-rendering="crispEdges">
+    <rect x="1" y="3" width="13" height="5" fill="#F4F0E4"/>
+    <rect x="2" y="2" width="11" height="7" fill="#F4F0E4"/>
+    <rect x="3" y="1" width="9" height="2" fill="#FFFFFF"/>
+    <rect x="12" y="3" width="4" height="4" fill="#3A3444"/>
+    <rect x="13" y="2" width="2" height="1" fill="#3A3444"/>
+    <rect x="14" y="4" width="1" height="1" fill="#FFFFFF"/>
+    <rect x="4" y="9" width="2" height="3" fill="#3A3444"/>
+    <rect x="9" y="9" width="2" height="3" fill="#3A3444"/>
+  </svg>`;
+  world.appendChild(s);
+}
+function pixCow(x,y,flip){
+  const c=document.createElement('div');c.className='deco moo';c.style.left=x+'px';c.style.top=y+'px';
+  c.style.animationDelay=(Math.random()*2.5)+'s';
+  c.title="moo.";
+  c.innerHTML=`<svg style="${flip?'transform:scaleX(-1)':''}" width="57" height="39" viewBox="0 0 19 13" shape-rendering="crispEdges">
+    <rect x="1" y="3" width="13" height="6" fill="#F8F4EC"/>
+    <rect x="3" y="4" width="4" height="3" fill="#4A3A34"/>
+    <rect x="9" y="6" width="3" height="3" fill="#4A3A34"/>
+    <rect x="13" y="2" width="5" height="5" fill="#F8F4EC"/>
+    <rect x="16" y="5" width="2" height="2" fill="#F0A8B8"/>
+    <rect x="13" y="1" width="1" height="1" fill="#E8DCC8"/><rect x="17" y="1" width="1" height="1" fill="#E8DCC8"/>
+    <rect x="14" y="3" width="1" height="1" fill="#2E2A38"/>
+    <rect x="3" y="9" width="2" height="4" fill="#4A3A34"/>
+    <rect x="10" y="9" width="2" height="4" fill="#4A3A34"/>
+  </svg>`;
+  world.appendChild(c);
+}
+function pixBush(x,y){
+  const b=document.createElement('div');b.className='deco';b.style.left=x+'px';b.style.top=y+'px';
+  b.innerHTML=`<svg width="48" height="30" viewBox="0 0 16 10" shape-rendering="crispEdges">
+    <rect x="2" y="3" width="12" height="6" fill="#3E8A4E"/>
+    <rect x="4" y="1" width="8" height="3" fill="#4EA35E"/>
+    <rect x="1" y="5" width="14" height="4" fill="#3E8A4E"/>
+    <rect x="5" y="4" width="2" height="2" fill="#E05252"/>
+    <rect x="10" y="6" width="2" height="2" fill="#E05252"/>
+  </svg>`;
+  world.appendChild(b);
+}
+function pixMushroom(x,y){
+  const m=document.createElement('div');m.className='deco';m.style.left=x+'px';m.style.top=y+'px';
+  m.innerHTML=`<svg width="30" height="30" viewBox="0 0 10 10" shape-rendering="crispEdges">
+    <rect x="1" y="2" width="8" height="4" fill="#E05252"/>
+    <rect x="2" y="1" width="6" height="2" fill="#E86868"/>
+    <rect x="3" y="3" width="1" height="1" fill="#FFF"/><rect x="6" y="2" width="1" height="1" fill="#FFF"/>
+    <rect x="4" y="6" width="3" height="4" fill="#F4EDD8"/>
+  </svg>`;
+  world.appendChild(m);
+}
+function pixTuft(x,y){
+  const t=document.createElement('div');t.className='deco';t.style.left=x+'px';t.style.top=y+'px';
+  t.innerHTML=`<svg width="24" height="18" viewBox="0 0 8 6" shape-rendering="crispEdges">
+    <rect x="1" y="2" width="1" height="4" fill="#4E9455"/>
+    <rect x="3" y="0" width="1" height="6" fill="#5EA35E"/>
+    <rect x="5" y="1" width="1" height="5" fill="#4E9455"/>
+  </svg>`;
+  world.appendChild(t);
+}
+function pixHouse(x,y,v=0,sc=1){
+  const roof=v?['#4AA394','#2E7D6E']:['#C85A48','#A64436'];
+  const h=document.createElement('div');h.className='deco';h.style.left=x+'px';h.style.top=y+'px';
+  h.title="somebody's home 🏡";
+  h.innerHTML=`<svg width="${96*sc}" height="${84*sc}" viewBox="0 0 32 28" shape-rendering="crispEdges">
+    <rect x="23" y="2" width="3" height="6" fill="#8A7060"/>
+    <rect x="4" y="10" width="24" height="16" fill="#F4E8D0"/>
+    <rect x="2" y="8" width="28" height="3" fill="${roof[1]}"/>
+    <rect x="4" y="5" width="24" height="3" fill="${roof[0]}"/>
+    <rect x="7" y="2" width="18" height="3" fill="${roof[0]}"/>
+    <rect x="11" y="0" width="10" height="2" fill="${roof[1]}"/>
+    <rect x="7" y="14" width="6" height="6" fill="#8FCBE8"/>
+    <rect x="9" y="14" width="1" height="6" fill="#F4E8D0"/><rect x="7" y="16" width="6" height="1" fill="#F4E8D0"/>
+    <rect x="7" y="13" width="6" height="1" fill="#8A5A34"/>
+    <rect x="18" y="16" width="7" height="10" fill="#8A5A34"/>
+    <rect x="19" y="17" width="5" height="9" fill="#A6713F"/>
+    <rect x="23" y="21" width="1" height="1" fill="#F2D03D"/>
+    <rect x="4" y="24" width="24" height="2" fill="#D9C8A8"/>
+  </svg>`;
+  world.appendChild(h);
+}
+function pixWalker(x,y,c='#7FA8E8',hair='#4A3A34',dist=70){
+  const w=document.createElement('div');w.className='deco walker';
+  w.style.left=x+'px';w.style.top=y+'px';
+  w.style.setProperty('--px',dist+'px');
+  w.style.setProperty('--pt',(7+Math.random()*4)+'s');
+  w.style.animationDelay=(-Math.random()*8)+'s';
+  w.innerHTML=`<svg width="30" height="42" viewBox="0 0 10 14" shape-rendering="crispEdges">
+    <rect x="3" y="0" width="4" height="2" fill="${hair}"/>
+    <rect x="2" y="1" width="6" height="3" fill="${hair}"/>
+    <rect x="3" y="2" width="4" height="3" fill="#F2C494"/>
+    <rect x="4" y="3" width="1" height="1" fill="#2E2A38"/>
+    <rect x="2" y="5" width="6" height="5" fill="${c}"/>
+    <rect x="1" y="6" width="1" height="3" fill="#F2C494"/><rect x="8" y="6" width="1" height="3" fill="#F2C494"/>
+    <rect x="3" y="10" width="2" height="3" fill="#5E5670"/>
+    <rect x="6" y="10" width="1" height="3" fill="#5E5670"/>
+    <rect x="3" y="13" width="2" height="1" fill="#2E2A38"/><rect x="6" y="13" width="2" height="1" fill="#2E2A38"/>
+  </svg>`;
+  world.appendChild(w);
+}
+function pixPond(x,y,sc=1){
+  const p=document.createElement('div');p.className='pond';
+  p.style.left=x+'px';p.style.top=y+'px';
+  p.style.width=(150*sc)+'px';p.style.height=(96*sc)+'px';
+  p.title="the pond. fish included.";
+  p.innerHTML=`<svg width="${150*sc}" height="${96*sc}" viewBox="0 0 50 32" shape-rendering="crispEdges" style="position:absolute;inset:0">
+    <rect x="6" y="4" width="38" height="24" fill="#5E9ED9"/>
+    <rect x="2" y="8" width="46" height="16" fill="#5E9ED9"/>
+    <rect x="10" y="2" width="30" height="28" fill="#5E9ED9"/>
+    <rect x="10" y="6" width="30" height="20" fill="#74B4E8"/>
+    <rect x="14" y="8" width="8" height="2" fill="#A8D4F4"/>
+    <rect x="30" y="20" width="10" height="2" fill="#A8D4F4"/>
+    <rect x="34" y="6" width="6" height="4" fill="#4EA35E"/>
+    <rect x="36" y="4" width="2" height="2" fill="#F08FB0"/>
+    <rect x="0" y="12" width="2" height="8" fill="#8A9EA8"/><rect x="48" y="10" width="2" height="8" fill="#8A9EA8"/>
+  </svg>
+  <span class="fish" style="left:${18*sc}px;top:${34*sc}px;--px:${58*sc}px;--pt:6.5s">
+    <svg width="${27*sc}" height="${15*sc}" viewBox="0 0 9 5" shape-rendering="crispEdges">
+      <rect x="2" y="1" width="5" height="3" fill="#F2A33D"/>
+      <rect x="0" y="0" width="2" height="5" fill="#E07A2E"/>
+      <rect x="6" y="2" width="1" height="1" fill="#2E2A38"/>
+    </svg></span>
+  <span class="fish" style="left:${30*sc}px;top:${58*sc}px;--px:${-46*sc}px;--pt:8s;animation-delay:-3s">
+    <svg width="${21*sc}" height="${12*sc}" viewBox="0 0 9 5" shape-rendering="crispEdges" style="transform:scaleX(-1)">
+      <rect x="2" y="1" width="5" height="3" fill="#F08FB0"/>
+      <rect x="0" y="0" width="2" height="5" fill="#D96888"/>
+      <rect x="6" y="2" width="1" height="1" fill="#2E2A38"/>
+    </svg></span>`;
+  world.appendChild(p);
+}
+function pixSpark(x,y,c){
+  const s=document.createElement('div');s.className='spark';s.style.left=x+'px';s.style.top=y+'px';
+  s.style.setProperty('--c',c);s.style.position='absolute';s.style.zIndex=2;
+  s.style.animationDelay=(Math.random()*2)+'s';
+  world.appendChild(s);
+}
+function placeDecor(){
+  $$('.deco,.pond,#world > .spark').forEach(e=>e.remove());
+  const colors=['#FFF3B0','#FFC4DA','#C4E8FF','#D8FFC4'];
+  const flowerC=['#F2D03D','#F08FB0','#9DB4FF','#FFFFFF','#F2A33D'];
+  const clamp=(x,pad=8,wpad=70)=>Math.max(pad,Math.min(W-wpad,x));
+  const mob=W<620, sc=mob?0.72:1;
+  const edge=ROADW/2, margin=edge+(mob?38:80);
+  /* dense meadow: scatter along the whole road, both sides */
+  const step=mob?200:230;
+  for(let y=120;y<H-180;y+=step){
+    const pt=pointAtY(y);
+    for(const side of [-1,1]){
+      const bandStart = side<0 ? 12 : pt.x+margin;
+      const bandW = side<0 ? pt.x-margin-12 : W-pt.x-margin-60;
+      if(bandW<34) continue;
+      const n=1+Math.floor(Math.random()*(mob?2:3));
+      for(let i=0;i<n;i++){
+        const x=clamp(bandStart+Math.random()*bandW);
+        const yy=y+(Math.random()*170-85);
+        const r=Math.random(), flip=Math.random()<.5;
+        if(r<.30) pixFlower(x,yy,flowerC[Math.floor(Math.random()*flowerC.length)]);
+        else if(r<.46) pixTuft(x,yy);
+        else if(r<.60) pixTree(x,yy,(mob?.65:.8)+Math.random()*.7);
+        else if(r<.71) pixBush(x,yy);
+        else if(r<.79) pixMushroom(x,yy);
+        else if(r<.90) pixSheep(x,yy,flip);
+        else pixCow(x,yy,flip);
+      }
+      if(Math.random()<.3) pixSpark(clamp(bandStart+Math.random()*bandW), y-90, colors[Math.floor(Math.random()*4)]);
+    }
+  }
+  /* garden walk: flowers lining both edges of the road */
+  const gardenC=['#F2D03D','#F08FB0','#9DB4FF','#FFFFFF','#F2A33D','#E06898'];
+  for(let y=170;y<H-220;y+=mob?110:92){
+    const pt=pointAtY(y);
+    for(const side of [-1,1]){
+      const gx=clamp(pt.x+side*(edge+16+Math.random()*12),4,26);
+      pixFlower(gx, y+Math.random()*24-12, gardenC[Math.floor(Math.random()*gardenC.length)]);
+      if(!mob && Math.random()<.22) pixTuft(clamp(pt.x+side*(edge+44+Math.random()*12)), y+Math.random()*20);
+    }
+  }
+  /* the village: farmhouses with villagers, and fish ponds between stops */
+  const walkerC=['#7FA8E8','#E06898','#F2A33D','#4AA394'];
+  const hairC=['#4A3A34','#E06898','#2E2A38','#8A5A34'];
+  for(let i=0;i<stops.length;i++){
+    const vy=Math.min(H-260,(i+1)*SEG+SEG*0.12);
+    const pt=pointAtY(vy);
+    const leftBand=pt.x-margin-12, rightBand=W-pt.x-margin-60;
+    const side=(leftBand>rightBand)?-1:1;
+    const bandStart= side<0 ? 12 : pt.x+margin;
+    const bandW= side<0 ? leftBand : rightBand;
+    if(i%2===0 && bandW>96*sc+20){
+      const hx=clamp(bandStart+Math.random()*Math.max(1,bandW-96*sc));
+      pixHouse(hx,vy,i%4===0?0:1,sc);
+      /* villagers patrol near their house */
+      pixWalker(clamp(hx+10),vy+92*sc,walkerC[i%4],hairC[(i+1)%4],(50+Math.random()*30)*sc);
+      if(!mob && Math.random()<.7) pixWalker(clamp(hx+60),vy+108,walkerC[(i+2)%4],hairC[i%4],-(40+Math.random()*30));
+    }else if(bandW>150*sc+20){
+      pixPond(clamp(bandStart+Math.random()*Math.max(1,bandW-150*sc)),vy,sc);
+    }
+  }
+  /* a couple of free-range villagers on the open meadow */
+  if(!mob){
+    const w1=pointAtY(H*0.28), w2=pointAtY(H*0.66);
+    pixWalker(clamp(w1.x-margin-140),H*0.28+140,'#E05252','#4A3A34',90);
+    pixWalker(clamp(w2.x+margin+90),H*0.66+120,'#9DB4FF','#E06898',-80);
+  }
+  /* a little flock hangs out near the finish */
+  const fy=H-SEG*0.55;const fpt=pointAtY(fy);
+  pixSheep(clamp(fpt.x-260*sc),fy,false);pixSheep(clamp(fpt.x-190*sc),fy+50,true);pixCow(clamp(fpt.x+180*sc),fy+20,true);
+  // quiet prayer-mat corner near stop 7 area, off to the side, no fanfare
+  const p7y=7*SEG-SEG*0.35;const p7=pointAtY(p7y);
+  pixMat(clamp(p7.x+((stops[6].dataset.side==='l')?1:-1)*(mob?120:180)), p7y+130);
+}
+
+/* ============ player follows road on scroll ============ */
+const player=$('#player'),cat=$('#cat'),bubble=$('#bubble');
+let lastX=0,frame=0,frameT=0,lastScroll=0,scrollTimer;
+let catX=null,catY=null;
+function tick(){
+  const worldTop=world.offsetTop;
+  const focusY=Math.max(6,Math.min(H-6, scrollY+innerHeight*0.55-worldTop));
+  const pt=pointAtY(focusY);
+  player.style.left=pt.x+'px';player.style.top=pt.y+'px';
+  bubble.style.left=pt.x+'px';bubble.style.top=pt.y+'px';
+  // walk animation while scrolling
+  const moving=Math.abs(scrollY-lastScroll)>2;
+  if(moving && !reduced){
+    frameT++;
+    if(frameT%4===0){frame=1-frame;drawGirl(frame);}
+  }
+  // face direction
+  player.classList.toggle('flip', pt.x<lastX-0.5);
+  lastX=pt.x;lastScroll=scrollY;
+  // cat lags behind
+  if(catX===null){catX=pt.x-46;catY=pt.y+6;}
+  catX+= (pt.x-46-catX)*0.06; catY+=(pt.y+8-catY)*0.06;
+  cat.style.left=catX+'px';cat.style.top=catY+'px';
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+/* ============ stops reveal + coins ============ */
+let coins=0;const seen=new Set();
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){
+    e.target.classList.add('in');
+    if(!seen.has(e.target.id)){seen.add(e.target.id);coins++;$('#coinN').textContent=coins;}
+    io.unobserve(e.target);
+  }
+}),{threshold:.25});
+stops.forEach(s=>io.observe(s));
+const ioF=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting && !seen.has('finish')){seen.add('finish');coins++;$('#coinN').textContent=coins;}
+}),{threshold:.3});
+ioF.observe($('#finish'));
+
+/* ============ ? block facts ============ */
+const facts=[
+  "two industry internships before final year. she doesn't wait for permission to start.",
+  "editor-in-chief + engineer. she debugs sentences and systems the same way.",
+  "she crochets gifts for people she loves. handmade > mass-produced, always.",
+  "her research is literally about writing better prompts. yes, she benchmarks her prompts.",
+  "chai over coffee. this is not a debate.",
+  "20 browser tabs open right now. she can defend every single one.",
+  "like a blue whale, she has to keep moving to feel alive — learning, building, making.",
+  "the cat does not work here. the cat supervises."
+];
+let fi=-1;
+function hitBlock(){
+  fi=(fi+1)%facts.length;
+  $('#facttext').textContent="✦ "+facts[fi];
+  const b=$('#qblock');b.style.animation='none';void b.offsetWidth;b.style.animation='';
+}
+$('#qblock').addEventListener('click',hitBlock);
+$('#qblock').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();hitBlock();}});
+
+/* ============ player speech on click near stops / start ============ */
+let bubbleTimer;
+function say(msg,ms=3800){
+  bubble.textContent=msg;bubble.classList.add('show');
+  clearTimeout(bubbleTimer);bubbleTimer=setTimeout(()=>bubble.classList.remove('show'),ms);
+}
+setTimeout(()=>{ if(scrollY<200) say("hey, you made it! ✨ scroll — I'll walk.")},2600);
+world.addEventListener('click',e=>{
+  const r=player.getBoundingClientRect();
+  if(Math.abs(e.clientX-r.x)<90 && Math.abs(e.clientY-r.y)<120){
+    say(["walking!","this road talks ✨","the cat is judging you","chai break soon?","almost there →"][Math.floor(Math.random()*5)]);
+  }
+});
+
+/* ============ pixie dust cursor trail ============ */
+if(!reduced && matchMedia('(pointer:fine)').matches){
+  const dc=['#F2B33D','#F08FB0','#9DB4FF','#FFF3B0'];let dT=0;
+  addEventListener('pointermove',e=>{
+    const now=performance.now();if(now-dT<55)return;dT=now;
+    const d=document.createElement('i');d.className='dust';
+    d.style.left=(e.clientX+8)+'px';d.style.top=(e.clientY+10)+'px';
+    d.style.background=dc[Math.floor(Math.random()*dc.length)];
+    d.style.setProperty('--dx',(Math.random()*20-10)+'px');
+    document.body.appendChild(d);setTimeout(()=>d.remove(),750);
+  });
+}
+
+/* ============ hud / menu ============ */
+$('#mapBtn').addEventListener('click',()=>{
+  const m=$('#mapmenu');m.classList.toggle('open');
+  $('#mapBtn').setAttribute('aria-expanded',m.classList.contains('open'));
+});
+$$('#mapmenu a').forEach(a=>a.addEventListener('click',()=>$('#mapmenu').classList.remove('open')));
+
+/* build + rebuild on resize */
+buildRoad();
+let rT;addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(buildRoad,200)});
+addEventListener('load',()=>setTimeout(buildRoad,60));
+</script>
+</body>
+</html>
