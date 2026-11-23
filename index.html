@@ -227,7 +227,7 @@ footer{position:relative;z-index:5;text-align:center;padding:18px;color:#2E4A2A;
 <div id="hud">
   <span class="px">SHAZIA.EXE</span>
   <span class="hearts">♥ ♥ ♥</span>
-  <span class="coins">⭐ <b id="coinN">0</b>/9</span>
+  <span class="coins">⭐ <b id="coinN">0</b>/10</span>
   <button id="mapBtn" aria-expanded="false">MAP</button>
 </div>
 <nav id="mapmenu" aria-label="jump to a stop">
@@ -236,11 +236,12 @@ footer{position:relative;z-index:5;text-align:center;padding:18px;color:#2E4A2A;
   <a href="#s2">📍 level: woxsen</a>
   <a href="#s3">📍 quest: quadrant</a>
   <a href="#s4">📍 side quest: singapore</a>
-  <a href="#s5">📍 current quest: quaicu</a>
-  <a href="#s6">⭐ lumen — live research</a>
-  <a href="#s7">🎒 inventory</a>
-  <a href="#s8">🏅 achievements</a>
-  <a href="#s9">❓ fun facts</a>
+  <a href="#s5">📍 quest: quaicu</a>
+  <a href="#s6">⭐ lumen — research</a>
+  <a href="#s7">🛡️ claimcheck</a>
+  <a href="#s8">🎒 inventory</a>
+  <a href="#s9">🏅 achievements</a>
+  <a href="#s10">❓ fun facts</a>
   <a href="#finish">🏆 finish</a>
 </nav>
 
@@ -285,7 +286,7 @@ footer{position:relative;z-index:5;text-align:center;padding:18px;color:#2E4A2A;
         <span class="lvl">📍 STOP 2 · EDUCATION</span>
         <h2>B.Tech CS — AI & ML</h2>
         <p>Woxsen University · class of 2027</p>
-        <p><span class="stat">CGPA <b>9.1</b></span><span class="stat">perpetual learner <b>+∞</b></span></p>
+        <p><span class="stat">CGPA <b>9.19</b></span><span class="stat">perpetual learner <b>+∞</b></span></p>
         <p>collects new skills the way others collect souvenirs — equal parts engineering rigor and philosophical curiosity. asks "why" until the subject surrenders.</p>
       </div>
     </div>
@@ -321,16 +322,16 @@ footer{position:relative;z-index:5;text-align:center;padding:18px;color:#2E4A2A;
 
   <section class="stop" id="s5" data-side="l">
     <div class="win" style="--b1:#B8E0D8;--b2:#C8ECE4">
-      <div class="bar"><span class="t">CURRENT QUEST: quaicu</span><i></i><i class="x"></i></div>
+      <div class="bar"><span class="t">QUEST: quaicu</span><i></i><i class="x"></i></div>
       <div class="body">
-        <span class="lvl">📍 STOP 5 · MAY 2026 – NOW · FOUNDERS OFFICE</span>
+        <span class="lvl">📍 STOP 5 · MAY 2026 – AUG 2026 · FOUNDERS OFFICE</span>
         <h2>Solutions Engineering Intern</h2>
         <p>Quaicu builds <b>air-gapped, on-premises AI</b> for banks, hospitals & legal teams — where data never leaves the building.</p>
         <ul>
-          <li>contributing to <b>ALIS</b>, the on-prem AI assistant</li>
-          <li>supporting the <b>AI Governance Kernel</b> — policy, auditability, control</li>
-          <li>currently automating <b>banking loan workflows</b></li>
-          <li>working directly under the CEO</li>
+          <li>contributed to <b>ALIS</b>, the on-prem AI assistant</li>
+          <li>supported the <b>AI Governance Kernel</b> — policy, auditability, control</li>
+          <li>automated <b>banking loan workflows</b></li>
+          <li>worked directly under the CEO</li>
         </ul>
       </div>
     </div>
@@ -338,11 +339,12 @@ footer{position:relative;z-index:5;text-align:center;padding:18px;color:#2E4A2A;
 
   <section class="stop glow" id="s6" data-side="r">
     <div class="win" style="--b1:#F8E4A8;--b2:#FCF0C4">
-      <div class="bar"><span class="t">⭐ ONGOING RESEARCH: lumen</span><i></i><i class="x"></i></div>
+      <div class="bar"><span class="t">⭐ RESEARCH: lumen</span><i></i><i class="x"></i></div>
       <div class="body">
-        <span class="lvl">⭐ SPECIAL STOP · LIVE & COLLECTING DATA</span>
+        <span class="lvl">⭐ SPECIAL STOP · UNDER REVIEW · IEEE THMS</span>
         <h2>Lumen — your question, sharpened</h2>
         <p>a live research app: one LLM call <b>critiques, scores & routes</b> every prompt. weak prompts get rewritten (up to 2 rounds), then both versions answer — users <b>blind-vote</b> while an AI judge picks independently. measuring human↔AI agreement.</p>
+        <p>📄 research paper <b>under review</b> at <b>IEEE Transactions on Human-Machine Systems</b>.</p>
         <p><span class="stat">Flask</span><span class="stat">Claude Haiku 4.5</span><span class="stat">Supabase</span><span class="stat">Render</span><span class="stat">43 tests ✓</span></p>
         <div class="btnrow">
           <a class="pbtn" href="https://lumen-2mqs.onrender.com" target="_blank" rel="noopener">PLAY LIVE ▸</a>
@@ -353,10 +355,28 @@ footer{position:relative;z-index:5;text-align:center;padding:18px;color:#2E4A2A;
   </section>
 
   <section class="stop" id="s7" data-side="l">
+    <div class="win" style="--b1:#C4E8E8;--b2:#D4F2F0">
+      <div class="bar"><span class="t">QUEST: claimcheck</span><i></i><i class="x"></i></div>
+      <div class="body">
+        <span class="lvl">📍 STOP 7 · ON-PREMISES SLM</span>
+        <h2>ClaimCheck — never invents a verdict</h2>
+        <p>an insurance claim checker where a small language model only <b>reads & extracts</b> fields, while plain deterministic code does the comparison. runs fully on-premises, so patient records never touch a cloud LLM.</p>
+        <ul>
+          <li>fine-tuned <b>Qwen2.5-3B</b> with QLoRA on a <b>1,500-case</b> synthetic dataset of messy claims</li>
+          <li>quote verifier, rule-based comparer, <b>hash-chained audit log</b></li>
+          <li>scans under <b>0.80 confidence</b> are never auto-agreed — a human reviewer approves every decision</li>
+        </ul>
+        <p><span class="stat">Qwen2.5-3B</span><span class="stat">QLoRA</span><span class="stat">Tesseract OCR</span><span class="stat">Streamlit</span></p>
+        <div class="btnrow"><a class="pbtn" href="https://github.com/Shazii-exe/ClaimCheck" target="_blank" rel="noopener">GITHUB ▸</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stop" id="s8" data-side="r">
     <div class="win" style="--b1:#D8C4F2;--b2:#E4D4F8">
       <div class="bar"><span class="t">INVENTORY 🎒</span><i></i><i class="x"></i></div>
       <div class="body">
-        <span class="lvl">📍 STOP 7 · EQUIPPED SKILLS</span>
+        <span class="lvl">📍 STOP 8 · EQUIPPED SKILLS</span>
         <div class="inv">
           <div class="slot"><b>AI & intelligent systems</b>python · ML · GenAI · agentic AI · RAG · LLM integrations · prompt engineering</div>
           <div class="slot"><b>software engineering</b>FastAPI · Flask · REST APIs · backend · git & github</div>
@@ -369,11 +389,11 @@ footer{position:relative;z-index:5;text-align:center;padding:18px;color:#2E4A2A;
     </div>
   </section>
 
-  <section class="stop" id="s8" data-side="r">
+  <section class="stop" id="s9" data-side="l">
     <div class="win" style="--b1:#F2E0B8;--b2:#F8ECC8">
       <div class="bar"><span class="t">ACHIEVEMENTS 🏅</span><i></i><i class="x"></i></div>
       <div class="body">
-        <span class="lvl">📍 STOP 8 · UNLOCKED</span>
+        <span class="lvl">📍 STOP 9 · UNLOCKED</span>
         <div class="ach">
           <span>🏆 ideathon winner</span><span>📰 editor-in-chief — tech magazine</span>
           <span>🥈 innoverse hackathon finalist</span><span>📚 editor-in-chief — tech club</span>
@@ -385,11 +405,11 @@ footer{position:relative;z-index:5;text-align:center;padding:18px;color:#2E4A2A;
     </div>
   </section>
 
-  <section class="stop" id="s9" data-side="l">
+  <section class="stop" id="s10" data-side="r">
     <div class="win" style="--b1:#F8D4C4;--b2:#FCE4D8">
       <div class="bar"><span class="t">??? .facts</span><i></i><i class="x"></i></div>
       <div class="body" style="text-align:center">
-        <span class="lvl">📍 STOP 9 · HIT THE BLOCK</span>
+        <span class="lvl">📍 STOP 10 · HIT THE BLOCK</span>
         <div id="qblock" role="button" tabindex="0" aria-label="hit the question block for a fun fact">?</div>
         <p id="facttext">hit the block. get a fact. simple economy.</p>
       </div>
@@ -404,7 +424,7 @@ footer{position:relative;z-index:5;text-align:center;padding:18px;color:#2E4A2A;
     <div class="bar"><span class="t">new_party_invite.msg</span><i></i><i class="x"></i></div>
     <div class="body">
       <p><b>heyy — you made it all the way here. want me to embark on my next journey with you?</b></p>
-      <p>two internships before graduation. live research collecting real data. systems that measurably work. I don't wait for permission, and I finish what I start.</p>
+      <p>two internships before graduation. research under review at IEEE THMS. systems that measurably work. I don't wait for permission, and I finish what I start.</p>
       <div class="btnrow">
         <a class="pbtn" href="mailto:shaziamahek18@gmail.com">✉ EMAIL</a>
         <a class="pbtn alt" href="https://github.com/Shazii-exe" target="_blank" rel="noopener">GITHUB</a>
@@ -798,8 +818,8 @@ function placeDecor(){
   const fy=H-SEG*0.55;const fpt=pointAtY(fy);
   pixSheep(clamp(fpt.x-260*sc),fy,false);pixSheep(clamp(fpt.x-190*sc),fy+50,true);pixCow(clamp(fpt.x+180*sc),fy+20,true);
   // quiet prayer-mat corner near stop 7 area, off to the side, no fanfare
-  const p7y=7*SEG-SEG*0.35;const p7=pointAtY(p7y);
-  pixMat(clamp(p7.x+((stops[6].dataset.side==='l')?1:-1)*(mob?120:180)), p7y+130);
+  const p7y=8*SEG-SEG*0.35;const p7=pointAtY(p7y);
+  pixMat(clamp(p7.x+((stops[7].dataset.side==='l')?1:-1)*(mob?120:180)), p7y+130);
 }
 
 /* ============ player follows road on scroll ============ */
